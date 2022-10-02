@@ -12,12 +12,24 @@ public class BuyXGetYFree implements Discount
     {
         this.discountItem = item;
         this.requirement = requirement;
+        validate();
     }
 
     @Override
     public int checkDiscount(Item[] items)
     {
+        int count = 0;
+        for (Item item : items)
+        {
+            if (item.equals(discountItem))
+            {
+                count++;
+            }
+        }
 
+        int timesApplied = count/ requirement;
+
+        return discountItem.getPrice() * timesApplied;
     }
 
     // for testing purposes
@@ -29,5 +41,14 @@ public class BuyXGetYFree implements Discount
     public int getRequirement()
     {
         return requirement;
+    }
+
+    @Override
+    public void validate()
+    {
+        if (discountItem == null || requirement <= 0)
+        {
+            throw new IllegalArgumentException("Arguments aren't correctly filled");
+        }
     }
 }

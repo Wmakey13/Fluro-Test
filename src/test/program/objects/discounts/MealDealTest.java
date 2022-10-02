@@ -6,13 +6,14 @@ import org.junit.Test;
 
 import main.program.objects.Item;
 import main.program.objects.discounts.MealDeal;
+import main.program.objects.discounts.MultiPrice;
 
 public class MealDealTest
 {
     public MealDeal mealDeal;
 
     @Test
-    public void testDiscountCreatedCorrectly()
+    public void testMealDealCreatedCorrectly()
     {
         Item item = new Item("A", 100);
         Item item2 = new Item("B", 200);
@@ -24,20 +25,20 @@ public class MealDealTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDiscountCreatedWithoutItemsThrowsIllegalArgumentException()
+    public void testMealDealCreatedWithoutItemsThrowsIllegalArgumentException()
     {
         mealDeal = new MealDeal(null, 250);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDiscountCreatedWithNullItemsThrowsIllegalArgumentException()
+    public void testMealDealCreatedWithNullItemsThrowsIllegalArgumentException()
     {
         Item item = new Item("A", 100);
         mealDeal = new MealDeal(new Item[] { item, null }, 250);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDiscountCreatedWithoutRequirementThrowsIllegalArgumentException()
+    public void testMealDealCreatedWithoutRequirementThrowsIllegalArgumentException()
     {
         Item item = new Item("A", 100);
         Item item2 = new Item("B", 200);
@@ -45,12 +46,33 @@ public class MealDealTest
     }
 
     @Test
-    public void testCorrectDiscount()
+    public void testMealDealCalculatedCorrectly()
     {
+        Item item = new Item("A", 100);
+        Item item2 = new Item("B", 200);
+        mealDeal = new MealDeal(new Item[] { item, item2 }, 250);
+        Item[] items = { item, item2 };
+        assertTrue(mealDeal.checkDiscount(items) == 50);
     }
 
     @Test
-    public void testCorrectDiscountMultiple()
+    public void testMealDealCalculatedCorrectlyWithMultipleOccurences()
     {
+        Item item = new Item("A", 100);
+        Item item2 = new Item("B", 200);
+        mealDeal = new MealDeal(new Item[] { item, item2 }, 250);
+        Item[] items = { item, item2, item, item2, item, item2, item, item2 };
+        assertTrue(mealDeal.checkDiscount(items) == 200);
+    }
+    
+    @Test
+    public void testMealDealCalculatedCorrectlyInAnAssortedList()
+    {
+        Item item = new Item("A", 100);
+        Item item2 = new Item("B", 200);
+        Item item3 = new Item("C", 300);
+        mealDeal = new MealDeal(new Item[] { item, item2 }, 250);
+        Item[] items = {item3, item, item3, item2 };
+        assertTrue(mealDeal.checkDiscount(items) == 50);
     }
 }

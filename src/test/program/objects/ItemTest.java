@@ -8,7 +8,6 @@ import main.program.objects.Item;
 
 public class ItemTest
 {
-    //make sure items cannot be set without a price or designation
     @Test
     public void itemSetWithCorrectDesignationAndPrice() {
         Item item = new Item("A", 100);
