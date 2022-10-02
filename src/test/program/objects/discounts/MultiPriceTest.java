@@ -21,16 +21,24 @@ public class MultiPriceTest
         assertTrue(multiPrice.getOccurencesPrice() == 3);
     }
 
-    @Test
-    public void testDiscountCreatedWithoutItemsThrowsIllegalArgumentException()
+    @Test(expected = IllegalArgumentException.class)
+    public void testDiscountCreatedWithoutItemThrowsIllegalArgumentException()
     {
-
+        multiPrice = new MultiPrice(null, 50, 3);
     }
 
-    @Test
-    public void testDiscountCreatedWithoutRequirementThrowsIllegalArgumentException()
+    @Test(expected = IllegalArgumentException.class)
+    public void testDiscountCreatedWithoutDiscountedPriceThrowsIllegalArgumentException()
     {
-
+        Item item = new Item("A", 100);
+        multiPrice = new MultiPrice(item, 0, 3);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testDiscountCreatedWithoutOccurencesThrowsIllegalArgumentException()
+    {
+        Item item = new Item("A", 100);
+        multiPrice = new MultiPrice(item, 0, 0);
     }
 
     @Test

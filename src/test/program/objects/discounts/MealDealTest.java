@@ -23,27 +23,34 @@ public class MealDealTest
         assertTrue(mealDeal.getMealDealPrice() == 250);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testDiscountCreatedWithoutItemsThrowsIllegalArgumentException()
     {
-
+        mealDeal = new MealDeal(null, 250);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
+    public void testDiscountCreatedWithNullItemsThrowsIllegalArgumentException()
+    {
+        Item item = new Item("A", 100);
+        mealDeal = new MealDeal(new Item[] { item, null }, 250);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testDiscountCreatedWithoutRequirementThrowsIllegalArgumentException()
     {
-
+        Item item = new Item("A", 100);
+        Item item2 = new Item("B", 200);
+        mealDeal = new MealDeal(new Item[] { item, item2 }, 0);
     }
 
     @Test
     public void testCorrectDiscount()
     {
-
     }
 
     @Test
     public void testCorrectDiscountMultiple()
     {
-
     }
 }
