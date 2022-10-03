@@ -14,12 +14,14 @@ import main.program.objects.Item;
 public class ShopProgramTest
 {
     public ShopProgram shopProgram = new ShopProgram();
+    Item item = new Item("A", 100);
+    Item item2 = new Item("B", 200);
 
     @Test
     public void testItemsCanBeAddedToItemList()
     {
         shopProgram = new ShopProgram();
-        
+
         shopProgram.addItemToItems("A", 100);
         shopProgram.addItemToItems("B", 200);
         shopProgram.addItemToItems("C", 300);
@@ -33,38 +35,78 @@ public class ShopProgramTest
     public void testItemIsNotAddedIfItemIsInvalid()
     {
         shopProgram = new ShopProgram();
-        
+
         shopProgram.addItemToItems("A", 0);
         shopProgram.addItemToItems(null, 200);
         shopProgram.addItemToItems("C", 300);
 
         Map<String, Item> itemsList = shopProgram.returnItems();
-        
+
         assertEquals(itemsList.size(), 1);
         assertTrue(itemsList.containsKey("C"));
         assertFalse(itemsList.containsKey("A"));
     }
-    
+
     @Test
     public void testCalculatePriceReturnsTheRightPrice()
     {
         shopProgram = new ShopProgram();
-        
+
+        shopProgram.addItemToItems("A", 100);
+        shopProgram.addItemToItems("B", 200);
+
+        String[] items = { "A", "B", "B" };
+        assertEquals(shopProgram.calculatePrices(items), 500);
+    }
+
+    @Test
+    public void testBuyXGetYFreeDiscountIsAppliedCorrectly()
+    {
+        shopProgram = new ShopProgram();
+
         shopProgram.addItemToItems("A", 100);
         shopProgram.addItemToItems("B", 200);
         
-        String[] items = {"A", "B", "B"};
-        assertEquals(shopProgram.calculatePrices(items), 500);
+        shopProgram.addDiscountToDiscounts("BuyXGetYFree", new Item[]{item}, new Integer[]{3});
+        
+        String[] items = { "A", "A", "A" };
+        assertEquals(shopProgram.calculatePrices(items), 200);
     }
     
+    @Test
+    public void testMealDealDiscountIsAppliedCorrectly()
+    {
+        shopProgram = new ShopProgram();
+
+        shopProgram.addItemToItems("A", 100);
+        shopProgram.addItemToItems("B", 200);
+        
+        shopProgram.addDiscountToDiscounts("MealDeal", new Item[]{item, item2}, new Integer[]{250});
+        
+        String[] items = { "A", "B"};
+        assertEquals(shopProgram.calculatePrices(items), 250);
+    }
+    
+    @Test
+    public void tesMultiPriceDiscountIsAppliedCorrectly()
+    {
+        shopProgram = new ShopProgram();
+
+        shopProgram.addItemToItems("A", 100);
+        
+        shopProgram.addDiscountToDiscounts("BuyXGetYFree", new Item[]{item}, new Integer[]{3, 275});
+        
+        String[] items = { "A", "A", "A" };
+        assertEquals(shopProgram.calculatePrices(items), 275);
+    }
+
     /**
      * Tests to implement
      * 
-     * That items without a discount can be scanned and a price given 
-     * That items with discount buy x get x free is applied correctly 
-     * That items with discount x for x price is applied correctly 
-     * That items with discount x and y for z is applied correctly 
-     * That discounts still happen when items aren't next to each other That item prices can be changed
+     * That items without a discount can be scanned and a price given That items with discount buy x get x free is
+     * applied correctly That items with discount x for x price is applied correctly That items with discount x and y
+     * for z is applied correctly That discounts still happen when items aren't next to each other That item prices can
+     * be changed
      * 
      **/
 }
