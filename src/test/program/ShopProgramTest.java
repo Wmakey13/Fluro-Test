@@ -35,7 +35,7 @@ public class ShopProgramTest
     @Test
     public void testItemsCanBeAddedToItemList()
     {
-        assertEquals(shopProgram.getSKUs().size(), 5);
+        assertEquals(5, shopProgram.getSKUs().size());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ShopProgramTest
 
         Map<String, Sku> itemsList = shopProgram.getSKUs();
 
-        assertEquals(itemsList.size(), 1);
+        assertEquals(1, itemsList.size());
         assertTrue(itemsList.containsKey("C"));
         assertFalse(itemsList.containsKey("A"));
     }
@@ -64,8 +64,8 @@ public class ShopProgramTest
 
         Map<String, Sku> itemsList = shopProgram.getSKUs();
 
-        assertEquals(itemsList.size(), 1);
-        assertEquals(itemsList.get("A").getPrice(), 140);
+        assertEquals(1, itemsList.size());
+        assertEquals(140, itemsList.get("A").getPrice());
     }
 
     @Test
@@ -74,14 +74,14 @@ public class ShopProgramTest
         shopProgram = new ShopProgram();
         shopProgram.addDiscountToDiscountsList("BuyXGetYFree", new Sku[] { item }, new Integer[] { 5, 2 });
         shopProgram.addDiscountToDiscountsList(null, null, null);
-        assertEquals(shopProgram.getDiscounts().size(), 1);
+        assertEquals(1, shopProgram.getDiscounts().size());
     }
 
     @Test
     public void testCalculatePriceReturnsTheRightPrice()
     {
         String[] items = { "A", "B", "B" };
-        assertEquals(shopProgram.calculatePrices(items), 500);
+        assertEquals(500, shopProgram.calculatePrices(items)); // 100+200+200
     }
 
     @Test
@@ -89,8 +89,8 @@ public class ShopProgramTest
     {
         shopProgram.addDiscountToDiscountsList("BuyXGetYFree", new Sku[] { item }, new Integer[] { 3, 1 });
 
-        String[] items = { "A", "A", "A" };
-        assertEquals(shopProgram.calculatePrices(items), 200);
+        String[] items = { "A", "A", "A", "A" };
+        assertEquals(300, shopProgram.calculatePrices(items)); // 400-100
     }
 
     @Test
@@ -98,8 +98,8 @@ public class ShopProgramTest
     {
         shopProgram.addDiscountToDiscountsList("BuyXGetYFree", new Sku[] { item }, new Integer[] { 3, 1 });
 
-        String[] items = { "A", "B", "A", "B", "A" };
-        assertEquals(shopProgram.calculatePrices(items), 600);
+        String[] items = { "A", "B", "A", "B", "A", "B", "A" };
+        assertEquals(900, shopProgram.calculatePrices(items)); // 400-100 + 600
     }
 
     @Test
@@ -108,7 +108,16 @@ public class ShopProgramTest
         shopProgram.addDiscountToDiscountsList("MealDeal", new Sku[] { item, item2 }, new Integer[] { 250 });
 
         String[] items = { "A", "B" };
-        assertEquals(shopProgram.calculatePrices(items), 250);
+        assertEquals(250, shopProgram.calculatePrices(items));
+    }
+
+    @Test
+    public void testMealDealDiscountIsAppliedCorrectlyWhenItemsAreApart()
+    {
+        shopProgram.addDiscountToDiscountsList("MealDeal", new Sku[] { item, item2 }, new Integer[] { 250 });
+
+        String[] items = { "A", "E", "B" };
+        assertEquals(750, shopProgram.calculatePrices(items)); // 250+500
     }
 
     @Test
@@ -117,7 +126,7 @@ public class ShopProgramTest
         shopProgram.addDiscountToDiscountsList("MultiPrice", new Sku[] { item }, new Integer[] { 3, 275 });
 
         String[] items = { "A", "A", "A" };
-        assertEquals(shopProgram.calculatePrices(items), 275);
+        assertEquals(275, shopProgram.calculatePrices(items));
     }
 
     @Test
@@ -126,29 +135,29 @@ public class ShopProgramTest
         shopProgram.addDiscountToDiscountsList("MultiPrice", new Sku[] { item }, new Integer[] { 3, 275 });
 
         String[] items = { "A", "B", "A", "B", "A" };
-        assertEquals(shopProgram.calculatePrices(items), 675);
+        assertEquals(675, shopProgram.calculatePrices(items)); // 275+400
     }
 
     @Test
     public void testUpdateRulesAndDiscountsAndCalculatePricesCalculatesCorrectly()
     {
         setUpUpdateArrayList();
-        int expectedPrice = 1800 + 650 + 350;
-        pricesAndRules.add("Basket: D|A|B|D|A|D|B|A|C|D");
+        int expectedPrice = 1800 + 1000 + 650 + 350 + 550 + 650;
+        pricesAndRules.add("Basket:D|A|B|D|A|C|D|A|D|A|B|D|A|E");
 
-        assertEquals(shopProgram.updateRulesAndDiscountsAndCalculatePrices(pricesAndRules), expectedPrice);
+        assertEquals(expectedPrice, shopProgram.updateRulesAndDiscountsAndCalculatePrices(pricesAndRules));
     }
 
     public void setUpUpdateArrayList()
     {
         pricesAndRules = new ArrayList<String>();
-        pricesAndRules.add("A:250");
-        pricesAndRules.add("B:350");
-        pricesAndRules.add("C:450");
-        pricesAndRules.add("D:550");
-        pricesAndRules.add("E:650");
-        pricesAndRules.add("BuyXGetYFree: A|3");
-        pricesAndRules.add("MealDeal: B|C|650");
-        pricesAndRules.add("MultiPrice: D|4|1800");
+        pricesAndRules.add("Item:A:250");
+        pricesAndRules.add("Item:B:350");
+        pricesAndRules.add("Item:C:450");
+        pricesAndRules.add("Item:D:550");
+        pricesAndRules.add("Item:E:650");
+        pricesAndRules.add("BuyXGetYFree:A:3|1");
+        pricesAndRules.add("MealDeal:B|C:650");
+        pricesAndRules.add("MultiPrice:D:4|1800");
     }
 }

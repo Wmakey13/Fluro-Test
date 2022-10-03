@@ -23,9 +23,9 @@ public class MealDealTest
     {
         mealDeal = new MealDeal(new Sku[] { item, item2 }, 250);
         Sku[] mealDealItems = mealDeal.getMealDealItems();
-        assertTrue(mealDealItems[0].equals(item));
-        assertTrue(mealDealItems[1].equals(item2));
-        assertTrue(mealDeal.getMealDealPrice() == 250);
+        assertEquals(item, mealDealItems[0]);
+        assertEquals(item2, mealDealItems[1]);
+        assertEquals(250, mealDeal.getMealDealPrice());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -52,7 +52,7 @@ public class MealDealTest
         mealDeal = new MealDeal(new Sku[] { item, item2 }, 250);
         basket.put(item.getDesignation(), 1);
         basket.put(item2.getDesignation(), 1);
-        assertEquals(mealDeal.calculateDiscount(basket), 50);
+        assertEquals(50, mealDeal.calculateDiscount(basket));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class MealDealTest
         mealDeal = new MealDeal(new Sku[] { item, item2 }, 250);
         basket.put(item.getDesignation(), 3);
         basket.put(item2.getDesignation(), 3);
-        assertEquals(mealDeal.calculateDiscount(basket), 150);
+        assertEquals(150, mealDeal.calculateDiscount(basket));
     }
 
     @Test
@@ -72,6 +72,6 @@ public class MealDealTest
         basket.put(item.getDesignation(), 1);
         basket.put(item2.getDesignation(), 1);
         basket.put(item3.getDesignation(), 4);
-        assertEquals(mealDeal.calculateDiscount(basket), 50);
+        assertEquals(50, mealDeal.calculateDiscount(basket));
     }
 }

@@ -20,11 +20,18 @@ public class MealDeal implements Discount
     @Override
     public int calculateDiscount(Map<String, Integer> items)
     {
-        int numberOfTimes = Math.min(items.get(mealDealItems[0].getDesignation()),
-                items.get(mealDealItems[1].getDesignation()));
+        String designationA = mealDealItems[0].getDesignation();
+        String designationB = mealDealItems[1].getDesignation();
+        
+        int mealDealItemOneAppearances = items.containsKey(designationA) ? items.get(designationA) : 0;
+        int mealDealItemTwoAppearances = items.containsKey(designationB) ? items.get(designationB) : 0;
 
-        return ((numberOfTimes * mealDealItems[0].getPrice()) + (numberOfTimes * mealDealItems[1].getPrice()))
-                - (mealDealPrice * numberOfTimes);
+        int numberOfTimes = Math.min(mealDealItemOneAppearances, mealDealItemTwoAppearances);
+
+        return numberOfTimes > 0
+                ? ((numberOfTimes * mealDealItems[0].getPrice()) + (numberOfTimes * mealDealItems[1].getPrice()))
+                        - (mealDealPrice * numberOfTimes)
+                : 0;
     }
 
     @Override
@@ -36,7 +43,7 @@ public class MealDeal implements Discount
             throw new IllegalArgumentException("Arguments aren't correctly filled");
         }
     }
-    
+
     // testing purposes
     public Sku[] getMealDealItems()
     {

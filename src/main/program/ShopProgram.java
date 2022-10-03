@@ -63,20 +63,62 @@ public class ShopProgram
                 itemsByOccurence.put(itemString, 1);
             }
         }
-
         if (!discounts.isEmpty())
         {
             for (Discount discount : discounts)
             {
-                accumulatedDiscount = discount.calculateDiscount(itemsByOccurence);
+                accumulatedDiscount = accumulatedDiscount + discount.calculateDiscount(itemsByOccurence);
             }
         }
         return price - accumulatedDiscount;
     }
-    
-    public int updateRulesAndDiscountsAndCalculatePrices(ArrayList<String> newPricesAndDiscounts) {
-        return 0;
-        
+
+    public int updateRulesAndDiscountsAndCalculatePrices(ArrayList<String> newPricesAndDiscounts)
+    {
+        return calculatePrices(parseString(newPricesAndDiscounts));
+    }
+
+    private String[] parseString(ArrayList<String> newPricesAndDiscounts)
+    {
+        String[] basket = null;
+        for (String information : newPricesAndDiscounts)
+        {
+            String[] info = information.split(":");
+            if (info[0].equals("Item"))
+            {
+                addItemsToShopMenu(info[1], Integer.parseInt(info[2]));
+            }
+            else if (info[0].equals("Basket"))
+            {
+                basket = info[1].split("\\|");
+            }
+            else
+            {
+                Sku[] newItems;
+                Integer[] details;
+                if (info[1].contains("|"))
+                {
+                    String[] itemSplit = info[1].split("\\|");
+                    newItems = new Sku[] { items.get(itemSplit[0]), items.get(itemSplit[1]) };
+                }
+                else
+                {
+                    newItems = new Sku[] { items.get(info[1]) };
+                }
+                if (info[2].contains("|"))
+                {
+                    String[] intSplit = info[2].split("\\|");
+                    details = new Integer[] { Integer.parseInt(intSplit[0]), Integer.parseInt(intSplit[1]) };
+                }
+                else
+                {
+                    details = new Integer[] { Integer.parseInt(info[2]) };
+                }
+
+                addDiscountToDiscountsList(info[0], newItems, details);
+            }
+        }
+        return basket;
     }
 
     // For Testing Purposes

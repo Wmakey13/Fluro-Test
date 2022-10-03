@@ -23,8 +23,8 @@ public class BuyXGetYFreeTest
     public void testBuyXGetYFreeCreatedCorrectly()
     {
         buyXGetYFree = new BuyXGetYFree(item, 4, 1);
-        assertTrue(buyXGetYFree.getDiscountedItem().equals(item));
-        assertTrue(buyXGetYFree.getRequirement() == 4);
+        assertEquals(item, buyXGetYFree.getDiscountedItem());
+        assertEquals(5, buyXGetYFree.getRequirement());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -48,22 +48,22 @@ public class BuyXGetYFreeTest
     @Test
     public void testBuyXGetYFreeCalculatedCorrectly()
     {
-        basket.put(item.getDesignation(), 3);
-        assertEquals(defaultbuyXGetYFree.calculateDiscount(basket), 100);
+        basket.put(item.getDesignation(), 4);
+        assertEquals(100, defaultbuyXGetYFree.calculateDiscount(basket));
     }
 
     @Test
     public void testBuyXGetYFreeCalculatedCorrectlyWithMultipleOccurences()
     {
         basket.put(item.getDesignation(), 9);
-        assertEquals(defaultbuyXGetYFree.calculateDiscount(basket), 300);
+        assertEquals(200, defaultbuyXGetYFree.calculateDiscount(basket));
     }
 
     @Test
     public void testBuyXGetYFreeCalculatedCorrectlyInAnAssortedList()
     {
-        basket.put(item.getDesignation(), 3);
+        basket.put(item.getDesignation(), 4);
         basket.put(item2.getDesignation(), 3);
-        assertEquals(defaultbuyXGetYFree.calculateDiscount(basket), 100);
+        assertEquals(100, defaultbuyXGetYFree.calculateDiscount(basket));
     }
 }

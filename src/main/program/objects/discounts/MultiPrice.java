@@ -22,8 +22,11 @@ public class MultiPrice implements Discount
     @Override
     public int calculateDiscount(Map<String, Integer> items)
     {
-        Integer counter = items.get(discountedItem.getDesignation());
-        return (discountedItem.getPrice() * counter) - (discount * (counter / occurences));
+        Integer counter = items.containsKey(discountedItem.getDesignation())
+                ? items.get(discountedItem.getDesignation()) / occurences
+                : 0;
+
+        return counter > 0 ? (discountedItem.getPrice() * (occurences * counter)) - (discount * counter) : 0;
     }
 
     @Override

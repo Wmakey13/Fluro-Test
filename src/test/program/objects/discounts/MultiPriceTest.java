@@ -1,5 +1,6 @@
 package test.program.objects.discounts;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
@@ -20,9 +21,9 @@ public class MultiPriceTest
     public void testMultiPriceCreatedCorrectly()
     {
         multiPrice = new MultiPrice(item, 3, 50);
-        assertTrue(multiPrice.getDiscountedItem().equals(item));
-        assertTrue(multiPrice.getDiscountPrice() == 50);
-        assertTrue(multiPrice.getOccurencesPrice() == 3);
+        assertEquals(item, multiPrice.getDiscountedItem());
+        assertEquals(50, multiPrice.getDiscountPrice());
+        assertEquals(3, multiPrice.getOccurencesPrice());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -48,7 +49,7 @@ public class MultiPriceTest
     {
         multiPrice = new MultiPrice(item, 3, 250);
         basket.put(item.getDesignation(), 3);
-        assertTrue(multiPrice.calculateDiscount(basket) == 50);
+        assertEquals(50, multiPrice.calculateDiscount(basket));
     }
 
     @Test
@@ -56,7 +57,7 @@ public class MultiPriceTest
     {
         multiPrice = new MultiPrice(item, 3, 250);
         basket.put(item.getDesignation(), 9);
-        assertTrue(multiPrice.calculateDiscount(basket) == 150);
+        assertEquals(150, multiPrice.calculateDiscount(basket));
     }
 
     @Test
@@ -66,6 +67,6 @@ public class MultiPriceTest
         multiPrice = new MultiPrice(item, 3, 250);
         basket.put(item.getDesignation(), 3);
         basket.put(item2.getDesignation(), 3);
-        assertTrue(multiPrice.calculateDiscount(basket) == 50);
+        assertEquals(50, multiPrice.calculateDiscount(basket));
     }
 }
