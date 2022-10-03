@@ -19,9 +19,10 @@ public class MealDeal implements Discount
     }
 
     @Override
-    public int checkDiscount(Map<Item, Integer> items)
+    public int checkDiscount(Map<String, Integer> items)
     {
-        int numberOfTimes = Math.min(items.get(mealDealItems[0]), items.get(mealDealItems[1]));
+        int numberOfTimes = Math.min(items.get(mealDealItems[0].getDesignation()),
+                items.get(mealDealItems[1].getDesignation()));
 
         return ((numberOfTimes * mealDealItems[0].getPrice()) + (numberOfTimes * mealDealItems[1].getPrice()))
                 - (mealDealPrice * numberOfTimes);

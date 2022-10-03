@@ -8,30 +8,30 @@ import main.program.objects.Item;
 
 public class MultiPrice implements Discount
 {
-    Item item;
+    Item discountedItem;
     int discount;
     int occurences;
 
     public MultiPrice(Item item, int occurences, int discount)
     {
-        this.item = item;
+        this.discountedItem = item;
         this.discount = discount;
         this.occurences = occurences;
         validate();
     }
 
     @Override
-    public int checkDiscount(Map<Item, Integer> items)
+    public int checkDiscount(Map<String, Integer> items)
     {
-        Integer counter = items.get(item);
-        return (item.getPrice() * counter) - (discount * (counter / occurences));
+        Integer counter = items.get(discountedItem.getDesignation());
+        return (discountedItem.getPrice() * counter) - (discount * (counter / occurences));
     }
 
     // Testing Purposes
     // testing purposes
     public Item getDiscountedItem()
     {
-        return item;
+        return discountedItem;
     }
 
     public int getDiscountPrice()
@@ -47,7 +47,7 @@ public class MultiPrice implements Discount
     @Override
     public void validate()
     {
-        if (item == null || occurences <= 0 || discount <= 0)
+        if (discountedItem == null || occurences <= 0 || discount <= 0)
         {
             throw new IllegalArgumentException("Arguments aren't correctly filled");
         }

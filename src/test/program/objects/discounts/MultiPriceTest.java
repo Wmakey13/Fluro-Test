@@ -14,7 +14,7 @@ public class MultiPriceTest
 {
     public MultiPrice multiPrice;
     Item item = new Item("A", 100);
-    Map<Item, Integer> basket = new HashMap<Item, Integer>();
+    Map<String, Integer> basket = new HashMap<String, Integer>();
 
     @Test
     public void testMultiPriceCreatedCorrectly()
@@ -47,7 +47,7 @@ public class MultiPriceTest
     public void testMultiPriceCalculatedCorrectly()
     {
         multiPrice = new MultiPrice(item, 3, 250);
-        basket.put(item, 3);
+        basket.put(item.getDesignation(), 3);
         assertTrue(multiPrice.checkDiscount(basket) == 50);
     }
 
@@ -55,7 +55,7 @@ public class MultiPriceTest
     public void testMultiPriceCalculatedCorrectlyWithMultipleOccurences()
     {
         multiPrice = new MultiPrice(item, 3, 250);
-        basket.put(item, 9);
+        basket.put(item.getDesignation(), 9);
         assertTrue(multiPrice.checkDiscount(basket) == 150);
     }
 
@@ -64,8 +64,8 @@ public class MultiPriceTest
     {
         Item item2 = new Item("B", 200);
         multiPrice = new MultiPrice(item, 3, 250);
-        basket.put(item, 3);
-        basket.put(item2, 3);
+        basket.put(item.getDesignation(), 3);
+        basket.put(item2.getDesignation(), 3);
         assertTrue(multiPrice.checkDiscount(basket) == 50);
     }
 }

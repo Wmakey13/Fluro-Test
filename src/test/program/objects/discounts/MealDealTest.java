@@ -16,7 +16,7 @@ public class MealDealTest
     public MealDeal mealDeal;
     Item item = new Item("A", 100);
     Item item2 = new Item("B", 200);
-    Map<Item, Integer> basket = new HashMap<Item, Integer>();
+    Map<String, Integer> basket = new HashMap<String, Integer>();
 
     @Test
     public void testMealDealCreatedCorrectly()
@@ -50,8 +50,8 @@ public class MealDealTest
     public void testMealDealCalculatedCorrectly()
     {
         mealDeal = new MealDeal(new Item[] { item, item2 }, 250);
-        basket.put(item, 1);
-        basket.put(item2, 1);
+        basket.put(item.getDesignation(), 1);
+        basket.put(item2.getDesignation(), 1);
         assertTrue(mealDeal.checkDiscount(basket) == 50);
     }
 
@@ -59,8 +59,8 @@ public class MealDealTest
     public void testMealDealCalculatedCorrectlyWithMultipleOccurences()
     {
         mealDeal = new MealDeal(new Item[] { item, item2 }, 250);
-        basket.put(item, 3);
-        basket.put(item2, 3);
+        basket.put(item.getDesignation(), 3);
+        basket.put(item2.getDesignation(), 3);
         assertTrue(mealDeal.checkDiscount(basket) == 150);
     }
 
@@ -69,9 +69,9 @@ public class MealDealTest
     {
         Item item3 = new Item("C", 300);
         mealDeal = new MealDeal(new Item[] { item, item2 }, 250);
-        basket.put(item, 1);
-        basket.put(item2, 1);
-        basket.put(item3, 4);
+        basket.put(item.getDesignation(), 1);
+        basket.put(item2.getDesignation(), 1);
+        basket.put(item3.getDesignation(), 4);
         assertTrue(mealDeal.checkDiscount(basket) == 50);
     }
 }

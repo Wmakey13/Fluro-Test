@@ -6,25 +6,26 @@ import java.util.Map;
 
 import main.program.objects.Discount;
 import main.program.objects.DiscountFactory;
-import main.program.objects.Item;
+import main.program.objects.Sku;
 
 public class ShopProgram
 {
-    Map<String, Item> items = new HashMap<String, Item>();
-    DiscountFactory discountFactory = new DiscountFactory();
-    ArrayList<Discount> discounts;
-    String[] basket;
+    private Map<String, Sku> items;
+    private DiscountFactory discountFactory;
+    private ArrayList<Discount> discounts;
 
-    public static void main(String[] args)
+    public ShopProgram()
     {
-
+        items = new HashMap<String, Sku>();
+        discountFactory = new DiscountFactory();
+        discounts = new ArrayList<Discount>();
     }
 
-    public void addItemToItems(String designation, int priceInPence)
+    public void addItemsToShopMenu(String designation, int priceInPence)
     {
         try
         {
-            Item item = new Item(designation, priceInPence);
+            Sku item = new Sku(designation, priceInPence);
             items.put(designation, item);
         }
         catch (IllegalArgumentException illegalArgumentException)
@@ -33,49 +34,59 @@ public class ShopProgram
         }
     }
 
-    public void addDiscountToDiscounts(String discountType, Item[] item, Integer[] details)
+    public void addDiscountToDiscountsList(String discountType, Sku[] item, Integer[] details)
     {
-        discounts.add(discountFactory.createDiscount(discountType, item, details));
+        Discount discount = discountFactory.createDiscount(discountType, item, details);
+        if (discount != null)
+        {
+            discounts.add(discount);
+        }
     }
 
     public int calculatePrices(String[] selectedItems)
     {
-        Map<Item, Integer> itemsByOccurence = new HashMap<Item, Integer>();
+        Map<String, Integer> itemsByOccurence = new HashMap<String, Integer>();
 
         int price = 0;
-        int moneyToRemove = 0;
+        int accumulatedDiscount = 0;
 
         for (String itemString : selectedItems)
         {
-            Item item = items.get(itemString);
+            Sku item = items.get(itemString);
             price = price + item.getPrice();
-            if (itemsByOccurence.containsKey(item))
+            if (itemsByOccurence.containsKey(itemString))
             {
-                itemsByOccurence.put(item, itemsByOccurence.get(item) + 1);
+                itemsByOccurence.put(itemString, itemsByOccurence.get(itemString) + 1);
             }
             else
             {
-                itemsByOccurence.put(item, 1);
+                itemsByOccurence.put(itemString, 1);
             }
         }
 
-        for (Discount discount : discounts)
+        if (!discounts.isEmpty())
         {
-            moneyToRemove = discount.checkDiscount(itemsByOccurence);
+            for (Discount discount : discounts)
+            {
+                accumulatedDiscount = discount.calculateDiscount(itemsByOccurence);
+            }
         }
-
-        return price - moneyToRemove;
+        return price - accumulatedDiscount;
+    }
+    
+    public int updateRulesAndDiscountsAndCalculatePrices(ArrayList<String> newPricesAndDiscounts) {
+        return 0;
+        
     }
 
     // For Testing Purposes
-    public Map<String, Item> returnItems()
+    public Map<String, Sku> getSKUs()
     {
         return items;
     }
 
-    public ArrayList<Discount> returnDiscounts()
+    public ArrayList<Discount> getDiscounts()
     {
         return discounts;
     }
-
 }
