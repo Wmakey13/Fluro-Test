@@ -1,13 +1,13 @@
 package main.program.objects;
 
-public class Item
+public class Sku
 {
     private String designation;
     private int price;
 
-    public Item(String designation, int price)
+    public Sku(String designation, int price)
     {
-        validateFilled(designation, price);
+        validate(designation, price);
         this.designation = designation;
         this.price = price;
     }
@@ -32,7 +32,7 @@ public class Item
         this.price = price;
     }
 
-    public void validateFilled(String designation, int price) {
+    private void validate(String designation, int price) {
         if((designation == null || designation.isEmpty())|| price <= 0) {
             throw new IllegalArgumentException("Arguments aren't correctly filled");
         }

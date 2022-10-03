@@ -6,23 +6,33 @@ import main.program.objects.discounts.MultiPrice;
 
 public class DiscountFactory
 {
-    public Discount createDiscount(String discountType, Item[] items, Integer[] details) throws IllegalArgumentException
+    public Discount createDiscount(String discountType, Sku[] items, Integer[] details) throws IllegalArgumentException
     {
-        if (discountType.equals("BuyXGetYFree"))
+        if (validate(discountType, items, details))
         {
-            return new BuyXGetYFree(items[0], details[0]);
+            if (discountType.equals("BuyXGetYFree") && details.length == 2)
+            {
+                return new BuyXGetYFree(items[0], details[0], details[1]);
+            }
+            else if (discountType.equals("MealDeal"))
+            {
+                return new MealDeal(items, details[0]);
+            }
+            else if (discountType.equals("MultiPrice") && details.length == 2)
+            {
+                return new MultiPrice(items[0], details[0], details[1]);
+            }
+            else
+            {
+                return null;
+            }
         }
-        else if (discountType.equals("MealDeal"))
-        {
-            return new MealDeal(items, details[0]);
-        }
-        else if (discountType.equals("MultiPrice") && details.length == 2)
-        {
-            return new MultiPrice(items[0], details[0], details[1]);
-        }
-        else
-        {
-            return null;
-        }
+        return null;
     }
+
+    public boolean validate(String discountType, Sku[] items, Integer[] details)
+    {
+        return discountType != null && !discountType.isEmpty() && items != null & details != null;
+    }
+
 }

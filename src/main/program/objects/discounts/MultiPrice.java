@@ -1,18 +1,17 @@
 package main.program.objects.discounts;
 
-import java.util.List;
 import java.util.Map;
 
 import main.program.objects.Discount;
-import main.program.objects.Item;
+import main.program.objects.Sku;
 
 public class MultiPrice implements Discount
 {
-    Item discountedItem;
-    int discount;
-    int occurences;
+    private final Sku discountedItem;
+    private final int discount;
+    private final int occurences;
 
-    public MultiPrice(Item item, int occurences, int discount)
+    public MultiPrice(Sku item, int occurences, int discount)
     {
         this.discountedItem = item;
         this.discount = discount;
@@ -21,15 +20,23 @@ public class MultiPrice implements Discount
     }
 
     @Override
-    public int checkDiscount(Map<String, Integer> items)
+    public int calculateDiscount(Map<String, Integer> items)
     {
         Integer counter = items.get(discountedItem.getDesignation());
         return (discountedItem.getPrice() * counter) - (discount * (counter / occurences));
     }
 
+    @Override
+    public void validate()
+    {
+        if (discountedItem == null || occurences <= 0 || discount <= 0)
+        {
+            throw new IllegalArgumentException("Arguments aren't correctly filled");
+        }
+    }
+
     // Testing Purposes
-    // testing purposes
-    public Item getDiscountedItem()
+    public Sku getDiscountedItem()
     {
         return discountedItem;
     }
@@ -42,14 +49,5 @@ public class MultiPrice implements Discount
     public int getOccurencesPrice()
     {
         return occurences;
-    }
-
-    @Override
-    public void validate()
-    {
-        if (discountedItem == null || occurences <= 0 || discount <= 0)
-        {
-            throw new IllegalArgumentException("Arguments aren't correctly filled");
-        }
     }
 }

@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface Discount
 {
-    public int checkDiscount(Map<String, Integer> items);
+    public int calculateDiscount(Map<String, Integer> items);
 
-    public void validate();
+    void validate();
 }

@@ -1,17 +1,16 @@
 package main.program.objects.discounts;
 
-import java.util.List;
 import java.util.Map;
 
 import main.program.objects.Discount;
-import main.program.objects.Item;
+import main.program.objects.Sku;
 
 public class MealDeal implements Discount
 {
-    Item[] mealDealItems;
-    int mealDealPrice;
+    private final Sku[] mealDealItems;
+    private final int mealDealPrice;
 
-    public MealDeal(Item[] mealDealItems, int mealDealPrice)
+    public MealDeal(Sku[] mealDealItems, int mealDealPrice)
     {
         this.mealDealItems = mealDealItems;
         this.mealDealPrice = mealDealPrice;
@@ -19,24 +18,13 @@ public class MealDeal implements Discount
     }
 
     @Override
-    public int checkDiscount(Map<String, Integer> items)
+    public int calculateDiscount(Map<String, Integer> items)
     {
         int numberOfTimes = Math.min(items.get(mealDealItems[0].getDesignation()),
                 items.get(mealDealItems[1].getDesignation()));
 
         return ((numberOfTimes * mealDealItems[0].getPrice()) + (numberOfTimes * mealDealItems[1].getPrice()))
                 - (mealDealPrice * numberOfTimes);
-    }
-
-    // testing purposes
-    public Item[] getMealDealItems()
-    {
-        return mealDealItems;
-    }
-
-    public int getMealDealPrice()
-    {
-        return mealDealPrice;
     }
 
     @Override
@@ -48,5 +36,15 @@ public class MealDeal implements Discount
             throw new IllegalArgumentException("Arguments aren't correctly filled");
         }
     }
+    
+    // testing purposes
+    public Sku[] getMealDealItems()
+    {
+        return mealDealItems;
+    }
 
+    public int getMealDealPrice()
+    {
+        return mealDealPrice;
+    }
 }

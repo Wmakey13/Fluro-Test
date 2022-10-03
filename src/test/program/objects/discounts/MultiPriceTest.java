@@ -7,14 +7,14 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import main.program.objects.Item;
+import main.program.objects.Sku;
 import main.program.objects.discounts.MultiPrice;
 
 public class MultiPriceTest
 {
-    public MultiPrice multiPrice;
-    Item item = new Item("A", 100);
-    Map<String, Integer> basket = new HashMap<String, Integer>();
+    private final Sku item = new Sku("A", 100);
+    private MultiPrice multiPrice;
+    private Map<String, Integer> basket = new HashMap<String, Integer>();
 
     @Test
     public void testMultiPriceCreatedCorrectly()
@@ -48,7 +48,7 @@ public class MultiPriceTest
     {
         multiPrice = new MultiPrice(item, 3, 250);
         basket.put(item.getDesignation(), 3);
-        assertTrue(multiPrice.checkDiscount(basket) == 50);
+        assertTrue(multiPrice.calculateDiscount(basket) == 50);
     }
 
     @Test
@@ -56,16 +56,16 @@ public class MultiPriceTest
     {
         multiPrice = new MultiPrice(item, 3, 250);
         basket.put(item.getDesignation(), 9);
-        assertTrue(multiPrice.checkDiscount(basket) == 150);
+        assertTrue(multiPrice.calculateDiscount(basket) == 150);
     }
 
     @Test
     public void testMultiPriceCalculatedCorrectlyInAnAssortedList()
     {
-        Item item2 = new Item("B", 200);
+        Sku item2 = new Sku("B", 200);
         multiPrice = new MultiPrice(item, 3, 250);
         basket.put(item.getDesignation(), 3);
         basket.put(item2.getDesignation(), 3);
-        assertTrue(multiPrice.checkDiscount(basket) == 50);
+        assertTrue(multiPrice.calculateDiscount(basket) == 50);
     }
 }

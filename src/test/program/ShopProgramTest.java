@@ -69,6 +69,15 @@ public class ShopProgramTest
     }
 
     @Test
+    public void testDiscountNotAddedIfNull()
+    {
+        shopProgram = new ShopProgram();
+        shopProgram.addDiscountToDiscountsList("BuyXGetYFree", new Sku[] { item }, new Integer[] { 5, 2 });
+        shopProgram.addDiscountToDiscountsList(null, null, null);
+        assertEquals(shopProgram.getDiscounts().size(), 1);
+    }
+
+    @Test
     public void testCalculatePriceReturnsTheRightPrice()
     {
         String[] items = { "A", "B", "B" };
@@ -78,7 +87,7 @@ public class ShopProgramTest
     @Test
     public void testBuyXGetYFreeDiscountIsAppliedCorrectly()
     {
-        shopProgram.addDiscountToDiscountsList("BuyXGetYFree", new Sku[] { item }, new Integer[] { 3 });
+        shopProgram.addDiscountToDiscountsList("BuyXGetYFree", new Sku[] { item }, new Integer[] { 3, 1 });
 
         String[] items = { "A", "A", "A" };
         assertEquals(shopProgram.calculatePrices(items), 200);
@@ -87,7 +96,7 @@ public class ShopProgramTest
     @Test
     public void testBuyXGetYFreeDiscountIsAppliedCorrectlyWhenItemsAreApart()
     {
-        shopProgram.addDiscountToDiscountsList("BuyXGetYFree", new Sku[] { item }, new Integer[] { 3 });
+        shopProgram.addDiscountToDiscountsList("BuyXGetYFree", new Sku[] { item }, new Integer[] { 3, 1 });
 
         String[] items = { "A", "B", "A", "B", "A" };
         assertEquals(shopProgram.calculatePrices(items), 600);
@@ -123,14 +132,16 @@ public class ShopProgramTest
     @Test
     public void testUpdateRulesAndDiscountsAndCalculatePricesCalculatesCorrectly()
     {
-        int expectedPrice = 1800+650+350; 
+        setUpUpdateArrayList();
+        int expectedPrice = 1800 + 650 + 350;
         pricesAndRules.add("Basket: D|A|B|D|A|D|B|A|C|D");
-        
+
         assertEquals(shopProgram.updateRulesAndDiscountsAndCalculatePrices(pricesAndRules), expectedPrice);
     }
-    
-    public void setUpUpdateArrayList() {
-        ArrayList<String> pricesAndRules = new ArrayList<String>();
+
+    public void setUpUpdateArrayList()
+    {
+        pricesAndRules = new ArrayList<String>();
         pricesAndRules.add("A:250");
         pricesAndRules.add("B:350");
         pricesAndRules.add("C:450");

@@ -25,7 +25,7 @@ public class BuyXGetYFree implements Discount
 
         int timesApplied = items.get(discountItemSKU.getDesignation()) / requirement;
 
-        return discountItemSKU.getPrice() * timesApplied;
+        return discountItemSKU.getPrice() * free * timesApplied;
     }
 
     @Override
