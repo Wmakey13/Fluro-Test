@@ -34,6 +34,14 @@ public class ShopProgram
         }
     }
 
+    public void removeItemsFromShopMenu(String designation)
+    {
+        if (items.containsKey(designation))
+        {
+            items.remove(designation);
+        }
+    }
+
     public void addDiscountToDiscountsList(String discountType, Sku[] item, Integer[] details)
     {
         Discount discount = discountFactory.createDiscount(discountType, item, details);
@@ -75,6 +83,21 @@ public class ShopProgram
 
     public int updateRulesAndDiscountsAndCalculatePrices(ArrayList<String> newPricesAndDiscounts)
     {
+        return updateRulesAndDiscountsAndCalculatePrices(newPricesAndDiscounts, true, false);
+    }
+
+    public int updateRulesAndDiscountsAndCalculatePrices(ArrayList<String> newPricesAndDiscounts,
+            boolean clearDiscounts, boolean clearItems)
+    {
+        if (clearItems)
+        {
+            items = new HashMap<String, Sku>();
+        }
+        if (clearDiscounts)
+        {
+            discounts = new ArrayList<Discount>();
+        }
+
         return calculatePrices(parseString(newPricesAndDiscounts));
     }
 
