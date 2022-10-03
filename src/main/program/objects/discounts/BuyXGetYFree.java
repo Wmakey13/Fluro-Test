@@ -1,5 +1,8 @@
 package main.program.objects.discounts;
 
+import java.util.List;
+import java.util.Map;
+
 import main.program.objects.Discount;
 import main.program.objects.Item;
 
@@ -16,18 +19,10 @@ public class BuyXGetYFree implements Discount
     }
 
     @Override
-    public int checkDiscount(Item[] items)
+    public int checkDiscount(Map<Item, Integer> items)
     {
-        int count = 0;
-        for (Item item : items)
-        {
-            if (item.equals(discountItem))
-            {
-                count++;
-            }
-        }
 
-        int timesApplied = count/ requirement;
+        int timesApplied = items.get(discountItem) / requirement;
 
         return discountItem.getPrice() * timesApplied;
     }

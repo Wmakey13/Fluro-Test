@@ -1,5 +1,8 @@
 package main.program.objects.discounts;
 
+import java.util.List;
+import java.util.Map;
+
 import main.program.objects.Discount;
 import main.program.objects.Item;
 
@@ -18,27 +21,10 @@ public class MultiPrice implements Discount
     }
 
     @Override
-    public int checkDiscount(Item[] items)
+    public int checkDiscount(Map<Item, Integer> items)
     {
-        int timesOccuring = 0;
-        int totalNo = 0;
-        int counter = 0;
-
-        for (Item selectedItem : items)
-        {
-            if (selectedItem.equals(item))
-            {
-                counter++;
-                totalNo++;
-            }
-            if (counter == occurences)
-            {
-                timesOccuring++;
-                counter = 0;
-            }
-        }
-
-        return (item.getPrice() * totalNo) - (discount * timesOccuring);
+        Integer counter = items.get(item);
+        return (item.getPrice() * counter) - (discount * (counter / occurences));
     }
 
     // Testing Purposes

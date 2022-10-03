@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import main.program.objects.Discount;
+import main.program.objects.DiscountFactory;
 import main.program.objects.Item;
 
 public class ShopProgram
 {
     Map<String, Item> items = new HashMap<String, Item>();
+    DiscountFactory discountFactory = new DiscountFactory();
     ArrayList<Discount> discounts;
     String[] basket;
 
@@ -27,35 +29,42 @@ public class ShopProgram
         }
         catch (IllegalArgumentException illegalArgumentException)
         {
-           System.out.println(illegalArgumentException.getMessage());
+            System.out.println(illegalArgumentException.getMessage());
         }
     }
 
-    public void addDiscountToDiscounts()
+    public void addDiscountToDiscounts(String discountType, Item[] item, Integer[] details)
     {
-
-    }
-
-    public void addItemToBasket(String designation)
-    {
-
-    }
-
-    public void applyDiscounts(String[] selectedItems)
-    {
-
+        discounts.add(discountFactory.createDiscount(discountType, item, details));
     }
 
     public int calculatePrices(String[] selectedItems)
     {
+        Map<Item, Integer> itemsByOccurence = new HashMap<Item, Integer>();
+
         int price = 0;
-        for (String item : selectedItems)
+        int moneyToRemove = 0;
+
+        for (String itemString : selectedItems)
         {
-            price = price + items.get(item).getPrice();
+            Item item = items.get(itemString);
+            price = price + item.getPrice();
+            if (itemsByOccurence.containsKey(item))
+            {
+                itemsByOccurence.put(item, itemsByOccurence.get(item) + 1);
+            }
+            else
+            {
+                itemsByOccurence.put(item, 1);
+            }
         }
-        // for item in list items, add price
-        // applyDiscounts(String[]) items
-        return price;
+
+        for (Discount discount : discounts)
+        {
+            moneyToRemove = discount.checkDiscount(itemsByOccurence);
+        }
+
+        return price - moneyToRemove;
     }
 
     // For Testing Purposes

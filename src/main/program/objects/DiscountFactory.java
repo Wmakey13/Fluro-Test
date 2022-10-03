@@ -6,23 +6,23 @@ import main.program.objects.discounts.MultiPrice;
 
 public class DiscountFactory
 {
-    public DiscountFactory()
+    public Discount createDiscount(String discountType, Item[] items, Integer[] details) throws IllegalArgumentException
     {
-
-    }
-
-    public BuyXGetYFree getNewBuyXGetYFree(Item item, int requirement)
-    {
-        return new BuyXGetYFree(item, requirement);
-    }
-
-    public MealDeal getMealDeal(Item[] mealDealItems, int mealDealPrice)
-    {
-        return new MealDeal(mealDealItems, mealDealPrice);
-    }
-
-    public MultiPrice getMultiPrice(Item item, int occurences, int discount)
-    {
-        return new MultiPrice(item, occurences, discount);
+        if (discountType.equals("BuyXGetYFree"))
+        {
+            return new BuyXGetYFree(items[0], details[0]);
+        }
+        else if (discountType.equals("MealDeal"))
+        {
+            return new MealDeal(items, details[0]);
+        }
+        else if (discountType.equals("MultiPrice") && details.length == 2)
+        {
+            return new MultiPrice(items[0], details[0], details[1]);
+        }
+        else
+        {
+            return null;
+        }
     }
 }

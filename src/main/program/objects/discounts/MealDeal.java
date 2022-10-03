@@ -1,5 +1,8 @@
 package main.program.objects.discounts;
 
+import java.util.List;
+import java.util.Map;
+
 import main.program.objects.Discount;
 import main.program.objects.Item;
 
@@ -16,24 +19,9 @@ public class MealDeal implements Discount
     }
 
     @Override
-    public int checkDiscount(Item[] items)
+    public int checkDiscount(Map<Item, Integer> items)
     {
-        int countItemA = 0;
-        int countItemB = 0;
-
-        for (Item selectedItem : items)
-        {
-            if (mealDealItems[0].equals(selectedItem))
-            {
-                countItemA++;
-            }
-            if (mealDealItems[1].equals(selectedItem))
-            {
-                countItemB++;
-            }
-        }
-
-        int numberOfTimes = Math.min(countItemA, countItemB);
+        int numberOfTimes = Math.min(items.get(mealDealItems[0]), items.get(mealDealItems[1]));
 
         return ((numberOfTimes * mealDealItems[0].getPrice()) + (numberOfTimes * mealDealItems[1].getPrice()))
                 - (mealDealPrice * numberOfTimes);
